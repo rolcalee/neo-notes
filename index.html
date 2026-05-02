@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Neo-Notes</title>
+  <!-- Icon -->
+  <link rel="icon" type="image/svg+xml" href="notepad.svg">
+  <!-- Tailwind CSS v3 -->
+  <link rel="stylesheet" href="./src/output.css">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+
+</head>
+
+<body class="bg-pink-200 min-h-screen flex flex-col p-4 sm:p-6 font-sans antialiased">
+<main class="flex-1">
+  <!-- HEADER -->
+  <div class="bg-yellow-300 border-4 border-black p-5 sm:p-6 shadow-[8px_8px_0px_black] transition-all">
+
+    <!-- On mobile: flex-col, on sm: flex-row with justify-between and items-center -->
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-5 sm:gap-0">
+
+      <!-- Title block: centered on mobile, left on desktop -->
+      <div class="flex items-center justify-center sm:justify-start gap-2">
+        <i class="ph ph-notebook text-3xl sm:text-4xl"></i>
+        <h1 class="text-3xl sm:text-4xl uppercase tracking-tight font-black">
+          Neo-Notes
+        </h1>
+      </div>
+      <button
+        id="openModal"
+        class="w-full sm:w-auto flex items-center justify-center gap-2 bg-black text-white px-6 py-3 sm:px-5 sm:py-2.5 border-4 border-black font-bold text-base sm:text-lg hover:-translate-y-1 transition-all duration-150 shadow-[3px_3px_0px_#facc15] hover:shadow-[6px_6px_0px_#facc15] active:translate-y-0">
+        <i class="ph ph-plus-circle text-xl"></i>
+        Add Note
+      </button>
+    </div>
+  </div>
+
+  <!-- NOTES GRID -->
+  <div
+    id="notesContainer"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mt-8 auto-rows-fr">
+  </div>
+
+  <!-- ADD / EDIT MODAL with new limits: title max 20, content max 200 -->
+  <div
+    id="modal"
+    class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center p-3 sm:p-4 z-50 transition-all">
+    <div class="bg-white border-4 border-black p-5 sm:p-6 w-full max-w-md shadow-[12px_12px_0px_black] modal-inner">
+      <div class="flex items-center gap-2 mb-4">
+        <i class="ph ph-file-text text-3xl"></i>
+        <h2 class="text-2xl sm:text-3xl uppercase font-black tracking-tight" id="modalTitle">Add Note</h2>
+      </div>
+
+      <!-- Title input -->
+      <input
+        id="noteTitle"
+        type="text"
+        placeholder="Title (max 20 chars)"
+        maxlength="20"
+        class="w-full border-4 border-black p-3 mb-1 outline-none font-medium focus:bg-yellow-50 transition"/>
+      <div id="titleCounter" class="char-counter text-gray-700 mt-0 mb-3">0 / 20</div>
+
+      <!-- Content textarea -->
+      <textarea
+        id="noteContent"
+        placeholder="Write something... (max 200 chars)"
+        maxlength="200"
+        rows="4"
+        class="w-full border-4 border-black p-3 h-28 sm:h-32 outline-none font-medium focus:bg-yellow-50 transition resize-vertical"></textarea>
+      <div id="contentCounter" class="char-counter text-gray-700 mt-0 mb-2">0 / 200</div>
+      <div class="flex flex-col sm:flex-row gap-3 mt-3">
+        
+        <button
+          id="saveNote"
+          class="flex items-center justify-center gap-2 flex-1 bg-yellow-300 border-4 border-black p-3 font-bold hover:-translate-y-1 transition-all duration-150 shadow-[2px_2px_0px_black] active:translate-y-0">
+          <i class="ph ph-floppy-disk text-xl"></i>
+          Save
+        </button>
+
+        <button
+          id="closeModal"
+          class="flex items-center justify-center gap-2 flex-1 bg-pink-300 border-4 border-black p-3 font-bold hover:-translate-y-1 transition-all duration-150">
+          <i class="ph ph-x-circle text-xl"></i>
+          Cancel
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div
+    id="deleteModal"
+    class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center p-3 z-50">
+    <div class="bg-white border-4 border-black p-5 sm:p-6 w-full max-w-sm text-center shadow-[12px_12px_0px_black]">
+      <div class="flex justify-center mb-2">
+        <i class="ph ph-trash text-5xl text-red-600"></i>
+      </div>
+      <h2 class="text-2xl uppercase font-black mb-3">Delete Entry?</h2>
+      <p class="mb-5 text-gray-700 font-medium">This action cannot be undone.</p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button
+          id="confirmDelete"
+          class="flex items-center justify-center gap-2 flex-1 bg-pink-300 border-4 border-black p-2.5 font-bold hover:-translate-y-1 transition-all">
+          <i class="ph ph-trash-simple text-lg"></i>
+          Delete
+        </button>
+        <button
+          id="cancelDelete"
+          class="flex items-center justify-center gap-2 flex-1 bg-yellow-300 border-4 border-black p-2.5 font-bold hover:-translate-y-1 transition-all">
+          <i class="ph ph-x text-lg"></i>
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST ALERT CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-5 right-4 z-50 flex flex-col gap-3 items-end"></div>
+
+</main>
+<br>
+    <!-- FOOTER -->
+    <footer class="mt-10 bg-white border-4 border-black px-6 py-3 sm:p-5 shadow-[6px_6px_0px_black]">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+
+        <!-- Left -->
+        <div class="flex items-center gap-2 text-center sm:text-left">
+        © 2026
+        </div>
+
+        <!-- Center -->
+        <p class="text-sm sm:text-base font-medium text-gray-700 text-center">
+          Made with Love!
+        </p>
+
+        <!-- Right -->
+        <div class="flex items-center gap-3 text-xl">
+          <a href="#" class="hover:-translate-y-1 transition">
+            <i class="ph ph-github-logo"></i>
+          </a>
+        </div>
+
+      </div>
+    </footer>
+  
+  <script src="script.js"> </script>
+</body>
+</html>
