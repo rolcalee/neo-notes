@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+  /* <style> */
+    /* custom alert toast animations */
+    @keyframes slideInRight {
+      0% { opacity: 0; transform: translateX(60px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideOutRight {
+      0% { opacity: 1; transform: translateX(0); }
+      100% { opacity: 0; transform: translateX(60px); }
+    }
+    .alert-toast {
+      animation: slideInRight 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+    }
+    .alert-hide {
+      animation: slideOutRight 0.25s ease forwards;
+    }
+    /* note-card hover lift & shadow transition */
+    .note-card {
+      transition: all 0.2s ease-in-out;
+    }
+    .note-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 12px 12px 0px 0px #000000 !important;
+    }
+    button:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
+    body.modal-open {
+      overflow: hidden;
+    }
+    .ph {
+      vertical-align: middle;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    button .ph {
+      pointer-events: none;
+    }
+    /* extra responsive touches */
+    @media (max-width: 640px) {
+      .modal-inner {
+        margin: 1rem;
+        width: calc(100% - 2rem);
+      }
+    }
+    /* character counter style */
+    .char-counter {
+      font-size: 0.7rem;
+      text-align: right;
+      margin-top: 0.2rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      font-family: monospace;
+    }
+    .char-counter.warning {
+      color: #b91c1c;
+    }
+  /* </style> */
+
+  
